@@ -5,7 +5,7 @@ account, built with Next.js 15 (App Router) and designed for Vercel. It talks to
 the Virtualizor Enduser API entirely from the server: credentials never reach the
 browser, never appear in logs, and never ship in a client bundle.
 
-The interface is built on the **Orbit** design system (documented in
+The interface is built on the **Orbit** design system (documented in.
 `docs/DESIGN-SYSTEM.md`).
 
 - Dashboard, live monitoring and status history
