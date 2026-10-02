@@ -1,0 +1,246 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Orbit — the Vantage design language
+   Deep-space surfaces, aurora accents, precise typography.
+   ========================================================================== */
+
+@layer base {
+  :root {
+    --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue",
+      "Noto Sans", Arial, sans-serif;
+    --font-mono: "SF Mono", "JetBrains Mono", "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    --radius-control: 0.625rem;
+    --radius-card: 1rem;
+    --radius-surface: 1.375rem;
+
+    /* Light theme */
+    --canvas: 220 33% 97%;
+    --surface: 0 0% 100%;
+    --surface-muted: 220 27% 95%;
+    --surface-raised: 0 0% 100%;
+    --surface-overlay: 0 0% 100%;
+
+    --border: 220 22% 89%;
+    --border-strong: 220 20% 78%;
+
+    --content: 224 47% 11%;
+    --content-muted: 222 18% 38%;
+    --content-subtle: 222 14% 50%;
+    --content-disabled: 222 12% 66%;
+
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+    --primary-soft: 262 90% 96%;
+    --primary-ring: 262 83% 70%;
+
+    --accent: 190 88% 40%;
+
+    --success: 154 62% 36%;
+    --success-foreground: 0 0% 100%;
+    --success-soft: 152 55% 94%;
+
+    --warning: 32 92% 45%;
+    --warning-foreground: 30 90% 12%;
+    --warning-soft: 38 95% 94%;
+
+    --danger: 356 72% 51%;
+    --danger-foreground: 0 0% 100%;
+    --danger-soft: 356 90% 96%;
+
+    --info: 214 90% 52%;
+    --info-foreground: 0 0% 100%;
+    --info-soft: 214 95% 95%;
+
+    --elevation-1: 0 1px 2px rgb(15 23 42 / 0.06), 0 1px 3px rgb(15 23 42 / 0.05);
+    --elevation-2: 0 2px 4px rgb(15 23 42 / 0.05), 0 8px 24px -8px rgb(15 23 42 / 0.12);
+    --elevation-3: 0 4px 8px rgb(15 23 42 / 0.06), 0 20px 40px -16px rgb(15 23 42 / 0.18);
+    --elevation-4: 0 8px 16px rgb(15 23 42 / 0.08), 0 32px 64px -24px rgb(15 23 42 / 0.26);
+
+    --aurora-1: 262 90% 62%;
+    --aurora-2: 190 92% 55%;
+    --aurora-3: 320 85% 62%;
+    --grid-line: 220 25% 88%;
+  }
+
+  .dark {
+    --canvas: 230 48% 4%;
+    --surface: 228 38% 7%;
+    --surface-muted: 228 32% 11%;
+    --surface-raised: 228 36% 9%;
+    --surface-overlay: 228 40% 8%;
+
+    --border: 226 26% 17%;
+    --border-strong: 226 26% 28%;
+
+    --content: 220 35% 96%;
+    --content-muted: 220 18% 70%;
+    --content-subtle: 220 14% 55%;
+    --content-disabled: 220 12% 40%;
+
+    --primary: 265 90% 69%;
+    --primary-foreground: 230 55% 7%;
+    --primary-soft: 265 55% 18%;
+    --primary-ring: 265 90% 76%;
+
+    --accent: 188 92% 58%;
+
+    --success: 152 60% 48%;
+    --success-foreground: 152 80% 8%;
+    --success-soft: 152 45% 15%;
+
+    --warning: 38 95% 58%;
+    --warning-foreground: 30 90% 10%;
+    --warning-soft: 35 55% 16%;
+
+    --danger: 0 85% 63%;
+    --danger-foreground: 0 80% 8%;
+    --danger-soft: 0 50% 17%;
+
+    --info: 212 95% 64%;
+    --info-foreground: 214 90% 8%;
+    --info-soft: 214 50% 16%;
+
+    --elevation-1: 0 1px 2px rgb(0 0 0 / 0.5);
+    --elevation-2: 0 2px 6px rgb(0 0 0 / 0.45), 0 10px 30px -12px rgb(0 0 0 / 0.7);
+    --elevation-3: 0 4px 12px rgb(0 0 0 / 0.5), 0 24px 48px -18px rgb(0 0 0 / 0.8);
+    --elevation-4: 0 10px 24px rgb(0 0 0 / 0.55), 0 40px 80px -28px rgb(0 0 0 / 0.85);
+
+    --aurora-1: 265 90% 68%;
+    --aurora-2: 188 92% 58%;
+    --aurora-3: 315 85% 66%;
+    --grid-line: 226 30% 20%;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: hsl(var(--canvas));
+    color: hsl(var(--content));
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01", "cv02", "cv03", "cv04";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100dvh;
+  }
+
+  ::selection {
+    background-color: hsl(var(--primary) / 0.28);
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--primary-ring));
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .orbit-aurora {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .orbit-aurora::before {
+    content: "";
+    position: absolute;
+    inset: -40% -20% auto -20%;
+    height: 460px;
+    z-index: -1;
+    background:
+      radial-gradient(38% 60% at 18% 30%, hsl(var(--aurora-1) / 0.28), transparent 70%),
+      radial-gradient(34% 55% at 72% 12%, hsl(var(--aurora-2) / 0.24), transparent 72%),
+      radial-gradient(30% 50% at 52% 44%, hsl(var(--aurora-3) / 0.18), transparent 74%);
+    filter: blur(28px);
+    pointer-events: none;
+  }
+
+  .orbit-grid {
+    background-image:
+      linear-gradient(to right, hsl(var(--grid-line) / 0.5) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--grid-line) / 0.5) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 20%, transparent 78%);
+  }
+
+  .orbit-panel {
+    background-color: hsl(var(--surface) / 0.9);
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius-card);
+    box-shadow: var(--elevation-1);
+    backdrop-filter: blur(16px) saturate(140%);
+  }
+
+  .orbit-glass {
+    background-image: linear-gradient(
+      160deg,
+      hsl(var(--surface-raised) / 0.92),
+      hsl(var(--surface) / 0.78)
+    );
+    border: 1px solid hsl(var(--border) / 0.9);
+    backdrop-filter: blur(20px) saturate(160%);
+  }
+
+  .orbit-hairline {
+    box-shadow: inset 0 1px 0 0 hsl(var(--content) / 0.04);
+  }
+
+  .orbit-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border-strong)) transparent;
+  }
+
+  .orbit-scroll::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .orbit-scroll::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--border-strong) / 0.7);
+    border: 3px solid transparent;
+    background-clip: content-box;
+    border-radius: 999px;
+  }
+
+  .orbit-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--border-strong));
+  }
+
+  .text-gradient {
+    background: linear-gradient(
+      100deg,
+      hsl(var(--content)) 12%,
+      hsl(var(--primary)) 48%,
+      hsl(var(--accent)) 82%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+}
