@@ -119,24 +119,72 @@ export async function requireRouteParam(context: RouteContext, name: string): Pr
   return value;
 }
 
-/** Request body validation errors are mapped to HTTP 400 with a clear message. */export async function parseJsonBody<Schema extends z.ZodTypeAny>(
+function bodyTooLargeError(): AppError {
+  return new AppError({
+    code: "INVALID_REQUEST",
+    message: `Request body exceeds the ${MAX_JSON_BODY_BYTES} byte limit.`,
+    status: 413,
+  });
+}
+
+function invalidJsonBodyError(): AppError {
+  return new AppError({ code: "INVALID_REQUEST", message: "Request body must be valid JSON." });
+}
+
+/** Read and parse a JSON body while enforcing the limit on the actual streamed bytes. */
+async function readLimitedJsonBody(request: NextRequest): Promise<unknown> {
+  const reader = request.body?.getReader();
+  if (!reader) {
+    throw invalidJsonBodyError();
+  }
+
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      totalBytes += value.byteLength;
+      if (totalBytes > MAX_JSON_BODY_BYTES) {
+        await reader.cancel().catch(() => undefined);
+        throw bodyTooLargeError();
+      }
+
+      chunks.push(value);
+    }
+  } catch (error) {
+    if (error instanceof AppError) throw error;
+    throw invalidJsonBodyError();
+  } finally {
+    reader.releaseLock();
+  }
+
+  const bytes = new Uint8Array(totalBytes);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+
+  try {
+    return JSON.parse(new TextDecoder().decode(bytes));
+  } catch {
+    throw invalidJsonBodyError();
+  }
+}
+
+/** Request body validation errors are mapped to HTTP 400 with a clear message. */
+export async function parseJsonBody<Schema extends z.ZodTypeAny>(
   request: NextRequest,
   schema: Schema,
 ): Promise<z.infer<Schema>> {
   const contentLength = Number(request.headers.get("content-length") ?? "0");
   if (Number.isFinite(contentLength) && contentLength > MAX_JSON_BODY_BYTES) {
-    throw new AppError({
-      code: "INVALID_REQUEST",
-      message: `Request body exceeds the ${MAX_JSON_BODY_BYTES} byte limit.`,
-      status: 413,
-    });
+    throw bodyTooLargeError();
   }
 
-  let json: unknown;
-  try {
-    json = await request.json();
-  } catch {
-    throw new AppError({ code: "INVALID_REQUEST", message: "Request body must be valid JSON." });
-  }
+  const json = await readLimitedJsonBody(request);
   return schema.parse(json);
 }
