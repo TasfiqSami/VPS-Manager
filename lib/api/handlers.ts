@@ -175,7 +175,7 @@ async function readLimitedJsonBody(request: NextRequest): Promise<unknown> {
   }
 }
 
-/** Request body validation errors are mapped to HTTP 400 with a clear message. */
+/** Read a bounded JSON request body and validate it against a Zod schema. */
 export async function parseJsonBody<Schema extends z.ZodTypeAny>(
   request: NextRequest,
   schema: Schema,
